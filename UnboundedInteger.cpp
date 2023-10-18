@@ -20,7 +20,7 @@ private:
 
 public:
     UnboundedInteger(const std::string& hexString) {
-        size_t numDigits = hexString.size() / 16 + (hexString.size() % 16 != 0); // Округлюємо вгору
+        size_t numDigits = hexString.size() / 16 + (hexString.size() % 16 != 0);
         integer = new uint64_t[numDigits];
         for (size_t i = 0; i < numDigits; i++) {
             std::string digitString = hexString.substr(i * 16, 16);
@@ -44,10 +44,9 @@ public:
     }
 
     void setHex(const std::string& hexString) {
-        // Очищаємо старі дані
         delete[] integer;
 
-        size_t numDigits = hexString.size() / 16 + (hexString.size() % 16 != 0); // Округлюємо вгору
+        size_t numDigits = hexString.size() / 16 + (hexString.size() % 16 != 0); 
         integer = new uint64_t[numDigits];
         for (size_t i = 0; i < numDigits; i++) {
             std::string digitString = hexString.substr(i * 16, 16);
@@ -171,20 +170,121 @@ public:
         UnboundedInteger result(ss);
         return result;
     }
+
+    UnboundedInteger ADD(const UnboundedInteger& second) const {
+        int maxSize = std::max(size, second.size);
+        uint64_t* resultInteger = new uint64_t[maxSize];
+        int tmp_sum = 0;
+
+        for (int i = 0; i < maxSize; i++) {
+            uint64_t num1 = integer[i];
+            uint64_t num2 = second.integer[i];
+            int tmp_length = std::to_string(num1).length();
+
+            resultInteger[i] = num1 + num2 + tmp_sum;
+
+            int powerOfTen = pow(10, tmp_length);
+
+            tmp_sum = ((num1 + num2) - ((num1 + num2) % powerOfTen)) / powerOfTen;
+
+        }
+
+        std::string ss;
+        ss = convertToHexString(resultInteger, size);
+
+        delete[] resultInteger;
+
+        UnboundedInteger result(ss);
+        return result;
+    }
+
+    UnboundedInteger SUB(const UnboundedInteger& second) const {
+        int maxSize = std::max(size, second.size);
+        uint64_t* resultInteger = new uint64_t[maxSize];
+        int borrow = 0;
+
+        for (int i = 0; i < maxSize; i++) {
+            uint64_t num1 = (i < size) ? integer[i] : 0;
+            uint64_t num2 = (i < second.size) ? second.integer[i] : 0;
+
+            num1 -= borrow;
+            borrow = 0;
+
+            if (num1 < num2) {
+                num1 += (1ULL << 64);
+                borrow = 1;
+            }
+
+            resultInteger[i] = num1 - num2;
+        }
+
+        int newSize = maxSize;
+        while (newSize > 1 && resultInteger[newSize - 1] == 0) {
+            newSize--;
+        }
+
+        std::string ss;
+        ss = convertToHexString(resultInteger, newSize);
+
+        delete[] resultInteger;
+
+        UnboundedInteger result(ss);
+        return result;
+    }
+
+    int MOD(unsigned int modNum) const {
+        std::string concatenatedNumbers;
+
+        for (int i = 0; i < size; i++) {
+            if (i != 0) {
+                concatenatedNumbers += std::to_string((integer[i] * 100 + integer[i - 1]) % modNum);
+            }
+            else {
+                concatenatedNumbers += std::to_string(integer[i] % modNum);
+            }
+        }
+
+        int concatenatedInt = std::stoi(concatenatedNumbers);
+        int result = concatenatedInt % modNum;
+
+        return result;
+    }
+
 };
 
 int main() {
-    //UnboundedInteger x("446f6e277420676f2075702074686572652e2e2e2049742773206461726b2e");
-    //
-    //std::cout << x.getHex() << '\n';
-    //x.printInteger();
-    //std::cout << std::endl << x.INV();
+    UnboundedInteger x("446f6e277420676f2075702074686572652e2e2e2049742773206461726b2e");
+    
+    std::cout << x.getHex() << '\n';
+    x.printInteger();
+    std::cout << std::endl << x.INV() << std::endl;
+    {
+        UnboundedInteger numberA("51bf608414ad5726a3c1bec098f77b1b54ffb2787f8d528a74c1d7fde6470ea4");
+        UnboundedInteger numberB("403db8ad88a3932a0b7e8189aed9eeffb8121dfac05c3512fdb396dd73f6331c");
 
-    UnboundedInteger numberA("51bf608414ad5726a3c1bec098f77b1b54ffb2787f8d528a74c1d7fde6470ea4");
-    UnboundedInteger numberB("403db8ad88a3932a0b7e8189aed9eeffb8121dfac05c3512fdb396dd73f6331c");
+        UnboundedInteger numberC = numberA.XOR(numberB);
+        std::cout << "XOR: " << numberC.getHex() << std::endl;
+    }
 
-    UnboundedInteger numberC = numberA.XOR(numberB);
-    std::cout << "XOR: " << numberC.getHex() << std::endl;
+    {
+        UnboundedInteger numberA("36f028580bb02cc8272a9a020f4200e346e276ae664e45ee80745574e2f5ab80");
+        UnboundedInteger numberB("70983d692f648185febe6d6fa607630ae68649f7e6fc45b94680096c06e4fadb");
+
+        UnboundedInteger numberC = numberA.ADD(numberB);
+        std::cout << "ADD: " << numberC.getHex() << std::endl;
+    }
+
+    {
+        UnboundedInteger numberA("33ced2c76b26cae94e162c4c0d2c0ff7c13094b0185a3c122e732d5ba77efebc");
+        UnboundedInteger numberB("22e962951cb6cd2ce279ab0e2095825c141d48ef3ca9dabf253e38760b57fe03");
+
+        UnboundedInteger numberC = numberA.SUB(numberB);
+        std::cout << "SUB: " << numberC.getHex() << std::endl;
+    }
+
+    UnboundedInteger numberA("10e570324e6ffdbc6b9c813dec968d9bad134bc0dbb061530934f4e59c2700b9");
+    
+    std::cout << "MOD: " << numberA.MOD(27) << std::endl;
 
     return 0;
 }
