@@ -215,7 +215,7 @@ class UnboundedInteger
             borrow = 0;
 
             if (num1 < num2) {
-                num1 += (1ULL) << 64;
+                num1 += (uint64_t)((1ULL) << 64);
                 borrow = 1;
             }
 
