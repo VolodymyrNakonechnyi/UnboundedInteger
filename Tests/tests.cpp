@@ -31,9 +31,9 @@ void testADD() {
 void testSUB() {
     UnboundedInteger numberA("33ced2c76b26cae94e162c4c0d2c0ff7c13094b0185a3c122e732d5ba77efebc");
     UnboundedInteger numberB("22e962951cb6cd2ce279ab0e2095825c141d48ef3ca9dabf253e38760b57fe03");
-    UnboundedInteger expectedResult("10e570324e6ffdbc6b9c813dec968d9bad134bc0dbb061530934f4e59c2");
+    UnboundedInteger expectedResult("10e570324e6ffdbd6b9c813dec968d9bad134bc0dbb061520934f4e59c2700b9");
 
-    UnboundedInteger result = numberA.ADD(numberB);
+    UnboundedInteger result = numberA.SUB(numberB);
     if (result.getHex() != expectedResult.getHex()) {
         throw std::runtime_error("SUB test failed");
     }
@@ -67,6 +67,6 @@ int main() {
     testADD();
     testSUB();
 
-
     return 0;
 }
+
