@@ -25,4 +25,4 @@ jobs:
         cd build
         cmake ..
         cmake --build .
-        ./Tests/tests
+        ./Desktop/C++/Tests/tests
