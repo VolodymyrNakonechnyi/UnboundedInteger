@@ -1,10 +1,4 @@
-#include "../UnboundedInteger/UnboundedInteger.h"
-#include <iostream>
-#include <cstdint>
-#include <string>
-#include <sstream>
-#include <iomanip>
-#include <cmath>
+#include "UnboundedInteger.h";
 
 void testXOR() {
     UnboundedInteger numberA("51bf608414ad5726a3c1bec098f77b1b54ffb2787f8d528a74c1d7fde6470ea4");
@@ -15,6 +9,8 @@ void testXOR() {
     if (result.getHex() != expectedResult.getHex()) {
         throw std::runtime_error("XOR test failed");
     }
+
+    std::cout << "Test XOR passed" << std::endl;
 }
 
 void testADD() {
@@ -26,6 +22,8 @@ void testADD() {
     if (result.getHex() != expectedResult.getHex()) {
         throw std::runtime_error("ADD test failed");
     }
+
+    std::cout << "Test ADD passed" << std::endl;
 }
 
 void testSUB() {
@@ -37,6 +35,8 @@ void testSUB() {
     if (result.getHex() != expectedResult.getHex()) {
         throw std::runtime_error("SUB test failed");
     }
+
+    std::cout << "Test SUB passed" << std::endl;
 }
 
 void testINV() {
@@ -47,6 +47,9 @@ void testINV() {
     if (result.getHex() != expectedResult.getHex()) {
         throw std::runtime_error("INV test failed");
     }
+
+    std::cout << "Test INV passed" << std::endl;
+
 }
 
 void testMOD() {
@@ -57,6 +60,8 @@ void testMOD() {
     if (result != expectedResult) {
         throw std::runtime_error("INV test failed");
     }
+
+    std::cout << "Test MOD passed" << std::endl;
 }
 
 int main() {
@@ -69,4 +74,3 @@ int main() {
 
     return 0;
 }
-
