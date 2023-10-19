@@ -27,4 +27,4 @@ jobs:
         cd build
         cmake ..
         cmake --build .
-        ./Tests/testUnboundInteger
+        ./Desktop/C++/Tests/testUnboundInteger
