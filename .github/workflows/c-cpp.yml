@@ -17,6 +17,5 @@ jobs:
       run: |
         mkdir build
         cd build
-        cmake ..
         cmake --build .
         ./Desktop/C++/Tests/testUnboundInteger
