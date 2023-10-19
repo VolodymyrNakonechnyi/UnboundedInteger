@@ -202,39 +202,40 @@ class UnboundedInteger
         return result;
     }
 
-    UnboundedInteger SUB(const UnboundedInteger& second) const {
-        int maxSize = std::max(size, second.size);
-        uint64_t* resultInteger = new uint64_t[maxSize];
-        int borrow = 0;
+UnboundedInteger SUB(const UnboundedInteger& second) const {
+    int maxSize = std::max(size, second.size);
+    uint64_t* resultInteger = new uint64_t[maxSize];
+    int borrow = 0;
 
-        for (int i = 0; i < maxSize; i++) {
-            uint64_t num1 = (i < size) ? integer[i] : 0;
-            uint64_t num2 = (i < second.size) ? second.integer[i] : 0;
+    for (int i = 0; i < maxSize; i++) {
+        unsigned long long num1 = (i < size) ? integer[i] : 0;
+        unsigned long long num2 = (i < second.size) ? second.integer[i] : 0;
 
-            num1 -= borrow;
-            borrow = 0;
+        num1 -= borrow;
+        borrow = 0;
 
-            if (num1 < num2) {
-                num1 += (1ULL << 64);
-                borrow = 1;
-            }
-
-            resultInteger[i] = num1 - num2;
+        if (num1 < num2) {
+            num1 += (1ULL << 64);
+            borrow = 1;
         }
 
-        int newSize = maxSize;
-        while (newSize > 1 && resultInteger[newSize - 1] == 0) {
-            newSize--;
-        }
-
-        std::string ss;
-        ss = convertToHexString(resultInteger, newSize);
-
-        delete[] resultInteger;
-
-        UnboundedInteger result(ss);
-        return result;
+        resultInteger[i] = num1 - num2;
     }
+
+    int newSize = maxSize;
+    while (newSize > 1 && resultInteger[newSize - 1] == 0) {
+        newSize--;
+    }
+
+    std::string ss;
+    ss = convertToHexString(resultInteger, newSize);
+
+    delete[] resultInteger;
+
+    UnboundedInteger result(ss);
+    return result;
+}
+
 
     int MOD(unsigned int modNum) const {
         std::string concatenatedNumbers;
