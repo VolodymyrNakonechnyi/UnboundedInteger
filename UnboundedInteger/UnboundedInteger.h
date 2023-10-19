@@ -215,7 +215,7 @@ class UnboundedInteger
             borrow = 0;
 
             if (num1 < num2) {
-                num1 += (static_cast<unsigned __int64>(1ULL) << 64);
+                num1 += (1ULL) << 64;
                 borrow = 1;
             }
 
