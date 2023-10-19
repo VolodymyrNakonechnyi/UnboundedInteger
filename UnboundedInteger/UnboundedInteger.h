@@ -185,7 +185,7 @@ class UnboundedInteger
 
             resultInteger[i] = num1 + num2 + tmp_sum;
 
-            int powerOfTen = pow(10, tmp_length);
+            int powerOfTen = std::pow(10, tmp_length);
 
             tmp_sum = ((num1 + num2) - ((num1 + num2) % powerOfTen)) / powerOfTen;
 
